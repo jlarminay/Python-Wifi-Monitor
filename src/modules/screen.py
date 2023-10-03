@@ -22,6 +22,9 @@ def printOut(stdscr, curses, items):
     stdscr.addstr(12, 0, "------------------------------")
     stdscr.addstr(13, 0, "Status Log:")
     for i, entry in enumerate(items['entires']):
+        if i >= 6:
+            break
+        
         row = 14
         if entry['status'] == "Disconnected":
             stdscr.addstr(row + i, 0, f"{entry['status']} \t{entry['timestamp']}", curses.color_pair(RED_ON_BLACK))
@@ -33,10 +36,4 @@ def printOut(stdscr, curses, items):
         else:
             stdscr.addstr(row + i, 0, f"{entry['status']} \t{entry['timestamp']}", curses.color_pair(BLUE_ON_BLACK))
 
-        if i >= 20:
-            break
-    # stdscr.addstr(4, 0, f"LDT: {items['last_disconnect_time']}")
-    # stdscr.addstr(5, 0, f"LDD: {items['last_disconnect_duration']}")
-    # stdscr.addstr(6, 0, f"Count: {items['disconnect_count']}")
-    # stdscr.addstr(7, 0, "")
     stdscr.refresh()

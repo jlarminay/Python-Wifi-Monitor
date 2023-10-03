@@ -54,7 +54,7 @@ def main(stdscr):
             if key == 10:  # Enter key
                 break
 
-            time.sleep(1.0)  # Wait for 0.5 seconds before updating the information
+            time.sleep(0.5)  # Wait for 0.5 seconds before updating the information
     except KeyboardInterrupt:
         pass
 
