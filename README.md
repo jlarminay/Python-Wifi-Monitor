@@ -25,3 +25,37 @@ sudo ./LCD35-show 180 # flip screen 180 degree
 ```
 
 For more details check out this [page](http://www.lcdwiki.com/3.5inch_RPi_Display).
+
+### Starting App on Startup
+
+I want the app to run immediatly on startup so I need to add the command to `rc.local` by using the following command:
+
+```bash
+sudo nano /etc/rc.local
+```
+
+From here, you can add the desired command near the bottom above `exit 0`
+
+```bash
+sudo python3 /path/to/updater.py
+```
+
+Lastly ensure the file is properly executable by using:
+
+```bash
+sudo chmod +x /etc/rc.local
+```
+
+### CRON Restart Daily
+
+I also want to restart the system everyday to ensure any updates are downloaded and make sure nothing is runnign amiss. I will edit the cron jobs by using:
+
+```bash
+sudo crontab -e
+```
+
+Then add the desired command:
+
+```bash
+0 0 * * * /sbin/shutdown -r now
+```
