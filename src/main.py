@@ -1,15 +1,17 @@
 import curses
 import time
-from modules import wifi, screen
+from modules import wifi, screen, file, cleaner
 
 # Color pair constants
 RED_ON_BLACK = 1
 GREEN_ON_BLACK = 2
+BLUE_ON_BLACK = 3
 
 def setup_colors():
     curses.start_color()
     curses.init_pair(RED_ON_BLACK, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(GREEN_ON_BLACK, curses.COLOR_GREEN, curses.COLOR_BLACK)
+    curses.init_pair(BLUE_ON_BLACK, curses.COLOR_BLUE, curses.COLOR_BLACK)
 
 def main(stdscr):
     # Don't wait for Enter key press when calling getch()
@@ -18,6 +20,8 @@ def main(stdscr):
     # stdscr.curs_set(0)  # Hide the cursor
     setup_colors()  # Initialize custom colors
 
+    file.write_status_to_file("started")
+
     try:
         while True:
             stdscr.clear()
@@ -25,12 +29,20 @@ def main(stdscr):
             current_time = time.strftime("%Y-%m-%d %H:%M:%S")
             current_ip = wifi.get_current_ip()
             wifi_status = wifi.is_wifi_connected()
+            file.write_status_to_file('connected' if wifi_status else 'disconnected')
+
+            file_analyzed = file.analyze_status_log()
 
             # Add text with custom color and attributes
             screen.printOut(stdscr, curses, {
-                "current_time": current_time,
+                "current_time": cleaner.clean_datetime(current_time),
                 "current_ip": current_ip,
-                "wifi_status": wifi_status
+                "wifi_status": wifi_status,
+                #
+                "count_in_30_days": file_analyzed['count_in_30_days'],
+                "longest_disconnect": file_analyzed['longest_disconnect'],
+                "average_disconnect": file_analyzed['average_disconnect'],
+                "entires": file_analyzed['entires'],
             })
 
             # Check for Enter key press
@@ -38,7 +50,7 @@ def main(stdscr):
             if key == 10:  # Enter key
                 break
 
-            time.sleep(0.5)  # Wait for 0.5 seconds before updating the information
+            time.sleep(1.0)  # Wait for 0.5 seconds before updating the information
     except KeyboardInterrupt:
         pass
 

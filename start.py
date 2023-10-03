@@ -2,6 +2,7 @@ import subprocess
 
 # Function to install dependencies from requirements.txt
 def install_requirements():
+    print("Installing dependencies...")
     try:
         subprocess.check_call(['pip3', 'install', '-r', 'requirements.txt'])
         print("Dependencies installed successfully.")
@@ -16,5 +17,5 @@ def run_main():
         print("Failed to run 'main.py'.")
 
 if __name__ == "__main__":
-    install_requirements()  # Install dependencies from requirements.txt
+    # install_requirements()  # Install dependencies from requirements.txt
     run_main()              # Run main.py
