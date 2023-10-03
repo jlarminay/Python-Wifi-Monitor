@@ -40,7 +40,6 @@ def read_status_log():
 # Function to parse the status log and calculate the required information
 def analyze_status_log():
     status_log = read_status_log()
-    status_log.reverse()
 
     count_in_30_days = 0
     longest_disconnect = None
@@ -48,10 +47,14 @@ def analyze_status_log():
 
     all_disconnect_durations = []
     last_disconnected_time = None
+    last_started_time = None
 
     for entry in status_log:
         timestamp_str, status = entry.strip().split(" - ", 1)
         timestamp = datetime.datetime.strptime(timestamp_str, "%Y-%m-%d %H:%M:%S")
+
+        if (datetime.datetime.now() - timestamp).days > 30:
+            continue
 
         if "disconnected" in status:
             entires.append({
@@ -59,33 +62,37 @@ def analyze_status_log():
                 "timestamp": cleaner.clean_datetime(timestamp),
                 "duration": 0
             })
-            last_disconnected_time = timestamp
+            last_disconnected_time = timestamp.timestamp()
             count_in_30_days += 1
         elif "connected" in status:
-            disconnected_duration = 0
+            disconnected_duration = None
             if last_disconnected_time:
-                disconnected_duration = last_disconnected_time - timestamp
-                last_disconnected_time = None
+                disconnected_duration = timestamp.timestamp() - last_disconnected_time
+                if longest_disconnect == None or disconnected_duration > longest_disconnect:
+                    longest_disconnect = disconnected_duration
                 all_disconnect_durations.append(disconnected_duration)
+                last_disconnected_time = None
             
-            entires.append({
-                "status": "Connected",
-                "timestamp": cleaner.clean_datetime(timestamp),
-                "duration": cleaner.time_difference(disconnected_duration)
-            })
+                entires.append({
+                    "status": "Connected",
+                    "timestamp": cleaner.clean_datetime(timestamp),
+                    "duration": 0 if disconnected_duration == None else cleaner.time_difference(disconnected_duration)
+                })
         elif "started" in status:
-            entires.append({
-                "status": "Started",
-                "timestamp": cleaner.clean_datetime(timestamp),
-                "duration": 0
-            })
+            # entires.append({
+            #     "status": "Started",
+            #     "timestamp": cleaner.clean_datetime(timestamp),
+            #     "duration": 0
+            # })
+            last_started_time = timestamp
 
-        if (datetime.datetime.now() - timestamp).days > 30:
-            break
+    average_disconnect = sum(all_disconnect_durations) / len(all_disconnect_durations) if len(all_disconnect_durations) > 0 else 0
+    entires.reverse()
 
     return {
         "count_in_30_days": count_in_30_days,
         "longest_disconnect": longest_disconnect,
-        "average_disconnect": sum(disconnected_duration) / len(disconnected_duration) if len(disconnected_duration) > 0 else 0,
+        "average_disconnect": average_disconnect,
+        "last_started_time": last_started_time,
         "entires": entires
     }

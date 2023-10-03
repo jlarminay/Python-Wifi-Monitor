@@ -26,8 +26,6 @@ def main(stdscr):
         while True:
             stdscr.clear()
 
-            current_time = time.strftime("%Y-%m-%d %H:%M:%S")
-            current_ip = wifi.get_current_ip()
             wifi_status = wifi.is_wifi_connected()
             file.write_status_to_file('connected' if wifi_status else 'disconnected')
 
@@ -35,13 +33,14 @@ def main(stdscr):
 
             # Add text with custom color and attributes
             screen.printOut(stdscr, curses, {
-                "current_time": cleaner.clean_datetime(current_time),
-                "current_ip": current_ip,
+                "current_time": cleaner.clean_datetime(time),
+                "current_ip": wifi.get_current_ip(),
                 "wifi_status": wifi_status,
                 #
                 "count_in_30_days": file_analyzed['count_in_30_days'],
-                "longest_disconnect": file_analyzed['longest_disconnect'],
-                "average_disconnect": file_analyzed['average_disconnect'],
+                "longest_disconnect": cleaner.time_difference(file_analyzed['longest_disconnect']),
+                "average_disconnect": cleaner.time_difference(file_analyzed['average_disconnect']),
+                "last_started_time": cleaner.clean_datetime(file_analyzed['last_started_time']),
                 "entires": file_analyzed['entires'],
             })
 
