@@ -15,7 +15,7 @@ def main(stdscr):
     # Don't wait for Enter key press when calling getch()
     stdscr.nodelay(1)
     stdscr.clear()
-    stdscr.curs_set(0)  # Hide the cursor
+    # stdscr.curs_set(0)  # Hide the cursor
     setup_colors()  # Initialize custom colors
 
     try:
