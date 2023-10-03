@@ -1,36 +1,51 @@
 import os
 import shutil
 import subprocess
+import requests
 
 # Specify the GitHub repository URL
 repo_url = "https://github.com/jlarminay/Python-Wifi-Monitor.git"
-
 # Specify the local directory where you want to clone the repository
-local_dir = "/home/pi/app"  # Replace with your desired directory
+local_dir = "/home/pi/app"
+# Specify the script you want to run within the repository
+script_to_run = "main.py"
 
-# Check if the target directory already exists
-if os.path.exists(local_dir):
+# Function to check internet connectivity
+def is_connected_to_internet():
     try:
-        # Remove the existing directory and its contents
-        shutil.rmtree(local_dir)
-        print(f"Removed existing directory: {local_dir}")
-    except Exception as e:
-        print(f"Error removing existing directory: {e}")
+        # Attempt to send a request to a known website (e.g., google.com)
+        requests.get("https://github.com", timeout=5)
+        return True
+    except requests.ConnectionError:
+        return False
+
+# Check if connected to the internet
+if is_connected_to_internet():
+    print("Connected to the internet")
+
+    # Check if the target directory already exists
+    if os.path.exists(local_dir):
+        try:
+            # Remove the existing directory and its contents
+            shutil.rmtree(local_dir)
+            print(f"Removed existing directory: {local_dir}")
+        except Exception as e:
+            print(f"Error removing existing directory: {e}")
+            exit(1)
+
+    # Clone the repository
+    try:
+        subprocess.run(["git", "clone", repo_url, local_dir], check=True)
+        print("Repository cloned successfully.")
+    except subprocess.CalledProcessError as e:
+        print("Error cloning repository:", e)
         exit(1)
 
-# Clone the repository
-try:
-    subprocess.run(["git", "clone", repo_url, local_dir], check=True)
-    print("Repository cloned successfully.")
-except subprocess.CalledProcessError as e:
-    print("Error cloning repository:", e)
-    exit(1)
+else:
+    print("Not connected to the internet. Cannot download the repository.")
 
 # Change to the cloned directory
 os.chdir(local_dir)
-
-# Specify the script you want to run within the repository
-script_to_run = "main.py"
 
 # Check if the script exists
 if not os.path.isfile(script_to_run):
