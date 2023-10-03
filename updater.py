@@ -19,6 +19,16 @@ def is_connected_to_internet():
     except requests.ConnectionError:
         return False
 
+# Function to set permissions recursively
+def set_permissions(path):
+    os.chmod(path, 0o755)
+    if os.path.isdir(path):
+        for dirpath, dirnames, filenames in os.walk(path):
+            for dirname in dirnames:
+                os.chmod(os.path.join(dirpath, dirname), 0o755)
+            for filename in filenames:
+                os.chmod(os.path.join(dirpath, filename), 0o755)
+
 # Check if connected to the internet
 if is_connected_to_internet():
     print("Connected to the internet")
@@ -51,6 +61,9 @@ os.chdir(local_dir)
 if not os.path.isfile(script_to_run):
     print(f"Script '{script_to_run}' not found in the repository.")
     exit(1)
+
+# Set permissions recursively for the cloned directory
+set_permissions(local_dir)
 
 # Execute the script
 try:

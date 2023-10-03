@@ -3,7 +3,7 @@ import subprocess
 # Function to install dependencies from requirements.txt
 def install_requirements():
     try:
-        subprocess.check_call(['pip', 'install', '-r', 'requirements.txt'])
+        subprocess.check_call(['pip3', 'install', '-r', 'requirements.txt'])
         print("Dependencies installed successfully.")
     except subprocess.CalledProcessError:
         print("Failed to install dependencies. Check if 'pip' is installed and 'requirements.txt' exists.")
