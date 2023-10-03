@@ -21,13 +21,13 @@ def is_connected_to_internet():
 
 # Function to set permissions recursively
 def set_permissions(path):
-    os.chmod(path, 0o755)
+    os.chmod(path, 0o777)
     if os.path.isdir(path):
         for dirpath, dirnames, filenames in os.walk(path):
             for dirname in dirnames:
-                os.chmod(os.path.join(dirpath, dirname), 0o755)
+                os.chmod(os.path.join(dirpath, dirname), 0o777)
             for filename in filenames:
-                os.chmod(os.path.join(dirpath, filename), 0o755)
+                os.chmod(os.path.join(dirpath, filename), 0o777)
 
 # Check if connected to the internet
 if is_connected_to_internet():
