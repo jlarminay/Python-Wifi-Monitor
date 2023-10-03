@@ -1,6 +1,6 @@
 import curses
 import time
-from modules import get_current_ip, is_wifi_connected
+import modules import get_current_ip, is_wifi_connected
 
 def main(stdscr):
     # Don't wait for Enter key press when calling getch()

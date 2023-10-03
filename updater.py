@@ -8,7 +8,7 @@ repo_url = "https://github.com/jlarminay/Python-Wifi-Monitor.git"
 # Specify the local directory where you want to clone the repository
 local_dir = "/home/pi/app"
 # Specify the script you want to run within the repository
-script_to_run = "main.py"
+script_to_run = "start.py"
 
 # Function to check internet connectivity
 def is_connected_to_internet():
