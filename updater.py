@@ -1,11 +1,22 @@
 import os
+import shutil
 import subprocess
 
 # Specify the GitHub repository URL
 repo_url = "https://github.com/jlarminay/Python-Wifi-Monitor.git"
 
 # Specify the local directory where you want to clone the repository
-local_dir = "/path/to/local/directory"  # Replace with your desired directory
+local_dir = "/home/pi/app"  # Replace with your desired directory
+
+# Check if the target directory already exists
+if os.path.exists(local_dir):
+    try:
+        # Remove the existing directory and its contents
+        shutil.rmtree(local_dir)
+        print(f"Removed existing directory: {local_dir}")
+    except Exception as e:
+        print(f"Error removing existing directory: {e}")
+        exit(1)
 
 # Clone the repository
 try:
@@ -28,7 +39,7 @@ if not os.path.isfile(script_to_run):
 
 # Execute the script
 try:
-    subprocess.run(["python", script_to_run], check=True)
+    subprocess.run(["python3", script_to_run], check=True)
 except subprocess.CalledProcessError as e:
     print(f"Error executing '{script_to_run}':", e)
     exit(1)
