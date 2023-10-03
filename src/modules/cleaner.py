@@ -1,4 +1,6 @@
 def time_difference(duration):
+    if duration==0:
+        return "None"
     minutes, seconds = divmod(duration, 60)
     hours, minutes = divmod(minutes, 60)
 

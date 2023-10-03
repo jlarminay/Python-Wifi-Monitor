@@ -91,8 +91,8 @@ def analyze_status_log():
 
     return {
         "count_in_30_days": count_in_30_days,
-        "longest_disconnect": longest_disconnect,
-        "average_disconnect": average_disconnect,
+        "longest_disconnect": longest_disconnect if longest_disconnect != None else 0,
+        "average_disconnect": average_disconnect if average_disconnect != None else 0,
         "last_started_time": last_started_time,
         "entires": entires
     }
