@@ -14,7 +14,7 @@ def printOut(stdscr, curses, items):
     stdscr.addstr(4, 0, "------------------------------")
     stdscr.addstr(5, 0, f"CPU Usage: \t{items['cpu_usage']}%")
     stdscr.addstr(6, 0, f"RAM Usage: \t{items['ram_usage']}%")
-    stdscr.addstr(7, 0, f"CPU Temperature: \t{items['cpu_temperature']}°C")
+    stdscr.addstr(7, 0, f"CPU Temp: \t{items['cpu_temperature']}°C")
     stdscr.addstr(8, 0, "------------------------------")
     stdscr.addstr(9, 0, f"Count in 30 days: \t{items['count_in_30_days']}")
     stdscr.addstr(10, 0, f"Longest disconnect: \t{items['longest_disconnect']}")
