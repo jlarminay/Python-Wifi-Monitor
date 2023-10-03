@@ -1,5 +1,7 @@
 import curses
+import signal
 import time
+import sys
 from modules import wifi, screen, file, cleaner, system
 
 # Color pair constants
@@ -12,6 +14,10 @@ def setup_colors():
     curses.init_pair(RED_ON_BLACK, curses.COLOR_RED, curses.COLOR_BLACK)
     curses.init_pair(GREEN_ON_BLACK, curses.COLOR_GREEN, curses.COLOR_BLACK)
     curses.init_pair(BLUE_ON_BLACK, curses.COLOR_BLUE, curses.COLOR_BLACK)
+
+def exit_handler():
+    file.write_status_to_file("stopped")
+    sys.exit(0)
 
 def main(stdscr):
     # Don't wait for Enter key press when calling getch()
@@ -52,11 +58,14 @@ def main(stdscr):
             # Check for Enter key press
             key = stdscr.getch()
             if key == 10:  # Enter key
+                exit_handler()
                 break
 
             time.sleep(0.5)  # Wait for 0.5 seconds before updating the information
     except KeyboardInterrupt:
         pass
+
+signal.signal(signal.SIGTERM, exit_handler)
 
 if __name__ == "__main__":
     curses.wrapper(main)
