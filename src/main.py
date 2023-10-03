@@ -1,6 +1,6 @@
 import curses
 import time
-from modules import wifi, screen, file, cleaner
+from modules import wifi, screen, file, cleaner, system
 
 # Color pair constants
 RED_ON_BLACK = 1
@@ -34,13 +34,18 @@ def main(stdscr):
             # Add text with custom color and attributes
             screen.printOut(stdscr, curses, {
                 "current_time": cleaner.clean_datetime(time),
+                "last_started_time": cleaner.clean_datetime(file_analyzed['last_started_time']),
                 "current_ip": wifi.get_current_ip(),
                 "wifi_status": wifi_status,
+                #
+                "cpu_usage": system.get_cpu_usage(),
+                "ram_usage": system.get_ram_usage(),
+                "cpu_temperature": system.get_cpu_temperature(),
                 #
                 "count_in_30_days": file_analyzed['count_in_30_days'],
                 "longest_disconnect": cleaner.time_difference(file_analyzed['longest_disconnect']),
                 "average_disconnect": cleaner.time_difference(file_analyzed['average_disconnect']),
-                "last_started_time": cleaner.clean_datetime(file_analyzed['last_started_time']),
+                #
                 "entires": file_analyzed['entires'],
             })
 

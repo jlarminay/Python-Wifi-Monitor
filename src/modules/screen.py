@@ -12,13 +12,17 @@ def printOut(stdscr, curses, items):
     stdscr.addstr(2, 0, f"Current IP: {items['current_ip']}")
     stdscr.addstr(3, 0, wifi_status_string, curses.color_pair(GREEN_ON_BLACK if items['wifi_status'] else RED_ON_BLACK))
     stdscr.addstr(4, 0, "------------------------------")
-    stdscr.addstr(5, 0, f"Count in 30 days: \t{items['count_in_30_days']}")
-    stdscr.addstr(6, 0, f"Longest disconnect: \t{items['longest_disconnect']}")
-    stdscr.addstr(7, 0, f"Average disconnect: \t{items['average_disconnect']}")
+    stdscr.addstr(5, 0, f"CPU Usage: \t{items['cpu_usage']}%")
+    stdscr.addstr(6, 0, f"RAM Usage: \t{items['ram_usage']}%")
+    stdscr.addstr(7, 0, f"CPU Temperature: \t{items['cpu_temperature']}°C")
     stdscr.addstr(8, 0, "------------------------------")
-    stdscr.addstr(9, 0, "Status Log:")
+    stdscr.addstr(9, 0, f"Count in 30 days: \t{items['count_in_30_days']}")
+    stdscr.addstr(10, 0, f"Longest disconnect: \t{items['longest_disconnect']}")
+    stdscr.addstr(11, 0, f"Average disconnect: \t{items['average_disconnect']}")
+    stdscr.addstr(12, 0, "------------------------------")
+    stdscr.addstr(13, 0, "Status Log:")
     for i, entry in enumerate(items['entires']):
-        row = 10
+        row = 14
         if entry['status'] == "Disconnected":
             stdscr.addstr(row + i, 0, f"{entry['status']} \t{entry['timestamp']}", curses.color_pair(RED_ON_BLACK))
         elif entry['status'] == "Connected":
