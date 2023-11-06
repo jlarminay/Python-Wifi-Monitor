@@ -53,7 +53,12 @@ def analyze_status_log():
         timestamp_str, status = entry.strip().split(" - ", 1)
         timestamp = datetime.datetime.strptime(timestamp_str, "%Y-%m-%d %H:%M:%S")
 
+        # check if within 30 days
         if (datetime.datetime.now() - timestamp).days > 30:
+            continue
+
+        # skip if caused my midnight restart
+        if timestamp.hour == 0 and timestamp.minute < 1:
             continue
 
         if "disconnected" in status:
